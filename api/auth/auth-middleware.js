@@ -25,7 +25,7 @@ const restricted = (req, res, next) => {
   }
   jwt.verify(token, JWT_SECRET, (err, decoded) => {
     if (err) {
-      next( {message: "Token invalid", status: 401 })
+      next( {message: "Token invalid", status: 401 } )
     }
     req.jwt_decoded = decoded 
   })
@@ -43,8 +43,11 @@ const only = role_name => (req, res, next) => {
 
     Pull the decoded token from the req object, to avoid verifying it again!
   */
- console.log('only')
- next()
+ if (req.jwt_decoded.role === role_name) {
+  next( {message: "This is not for you", status: 401} )
+ }else{
+   next()
+ }
 }
 
 
@@ -88,8 +91,15 @@ const validateRoleName = (req, res, next) => {
       "message": "Role name can not be longer than 32 chars"
     }
   */
- console.log('validateRoleName')
- next()
+ if (!req.body.role_name || !req.body.role_name.trim()) {
+  req.role_name = 'student'  
+ }else if (req.body.role_name.trim() === 'admin') {
+    next({ message: "Role name can not be admin", status: 422 })
+  }else if (req.body.role_name.trim().length() > 32 ){
+   next({ message: "Role name can not be longer than 32 chars", status: 422 })
+ }else{
+   next()
+ }
 }
 
 module.exports = {
