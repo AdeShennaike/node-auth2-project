@@ -21,37 +21,46 @@ function find() {
   return db('users')
     .select('user_id', 'username', 'role_name')
     .join('roles', 'roles.role_id', 'users.role_id')
-}
-
-function findBy(filter) {
-  /**
-    You will need to join two tables.
-    Resolves to an ARRAY with all users that match the filter condition.
-
-    [
-      {
-        "user_id": 1,
-        "username": "bob",
-        "password": "$2a$10$dFwWjD8hi8K2I9/Y65MWi.WU0qn9eAVaiBoRSShTvuJVGw8XpsCiq",
-        "role_name": "admin",
-      }
-    ]
-   */
-}
-
-function findById(user_id) {
-  /**
-    You will need to join two tables.
-    Resolves to the user with the given user_id.
-
-    {
-      "user_id": 2,
-      "username": "sue",
-      "role_name": "instructor"
+  }
+  
+  function findBy(filter) {
+    /**
+     You will need to join two tables.
+     Resolves to an ARRAY with all users that match the filter condition.
+     
+     [
+       {
+         "user_id": 1,
+         "username": "bob",
+         "password": "$2a$10$dFwWjD8hi8K2I9/Y65MWi.WU0qn9eAVaiBoRSShTvuJVGw8XpsCiq",
+         "role_name": "admin",
+        }
+      ]
+      */
+     return db('users')
+     .select('users.*')
+     .join('roles', 'roles.role_id', 'users.role_id')
+     .where(filter)
     }
-   */
-}
-
+    
+    function findById(user_id) {
+      /**
+       You will need to join two tables.
+       Resolves to the user with the given user_id.
+       
+       {
+         "user_id": 2,
+         "username": "sue",
+         "role_name": "instructor"
+        }
+        */
+       return db('users')
+         .select('user_id', 'username', 'role_name')
+         .join('roles', 'roles.role_id', 'users.role_id')
+         .where('user_id', user_id)
+         .first()
+      }
+      
 /**
   Creating a user requires a single insert (into users) if the role record with the given
   role_name already exists in the db, or two inserts (into roles and then into users)
