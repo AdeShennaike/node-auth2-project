@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs')
 const User = require('../users/users-model')
 const magicToken = require('./auth-token-builder')
 
-router.post("/register", validateRoleName, (req, res, next) => {
+router.post("/register", validateRoleName, async (req, res, next) => {
   /**
     [POST] /api/auth/register { "username": "anna", "password": "1234", "role_name": "angel" }
 
@@ -17,7 +17,15 @@ router.post("/register", validateRoleName, (req, res, next) => {
       "role_name": "angel"
     }
    */
-
+    try{
+      const {username, password} = req.body
+      const {role_name} = req
+      const hash = bcrypt.hashSync(password, 8)
+      const addUser = await User.add({ username, password: hash, role_name })
+      res.json(addUser)
+    }catch(err){
+      next(err)
+    }
 });
 
 

@@ -99,6 +99,7 @@ const validateRoleName = (req, res, next) => {
   } else if (req.body.role_name.trim().length > 32) {
     next({ message: "Role name can not be longer than 32 chars", status: 422 })
   } else {
+    req.role_name = req.body.role_name.trim()
     next()
   }
 }

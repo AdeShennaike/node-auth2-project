@@ -3,7 +3,7 @@ const {JWT_SECRET} = require('../secrets/index')
 
 function tokenBuilder(user){
     const payload = {
-        subject: user.id,
+        subject: user.user_id,
         username: user.username,
         role: user.role_name,
     }
