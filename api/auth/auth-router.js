@@ -51,9 +51,8 @@ router.post("/login", checkUsernameExists, async (req, res, next) => {
    */
   try{
   const {username, password} = req.body
-  const [user] = await User.findBy({username})
-  const token = magicToken(user)
-  if(username && bcrypt.compareSync(password, user.password)){
+  const token = magicToken(req.user)
+  if(username && bcrypt.compareSync(password, req.user.password)){
     res.json({message: `${username} is back!`, token})
   }else{
     next()
