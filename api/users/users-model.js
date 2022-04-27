@@ -18,7 +18,9 @@ function find() {
       }
     ]
    */
-  
+  return db('users')
+    .select('user_id', 'username', 'role_name')
+    .join('roles', 'roles.role_id', 'users.role_id')
 }
 
 function findBy(filter) {
